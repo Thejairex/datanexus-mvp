@@ -16,8 +16,6 @@ class Recommender:
         num_parts = len([name for name in os.listdir(input_dir)
                         if name.startswith('similitud_restaurantes.pkl.part')])
 
-        print(self.data[self.data['category'].str.contains("mexican restaurant", case=False)])
-
         self.recomponer_archivo(output_file, input_dir, num_parts)
         self.similitud = joblib.load('data/similitud_restaurantes.pkl')
         self.tfidf_matrix = self.vectorizador.fit_transform(self.data['text'])
@@ -47,7 +45,5 @@ class Recommender:
 
         recomendaciones = filtrado.sort_values(
             by='similitud_promedio', ascending=False)
-        
-        print(recomendaciones[["name", "address", "rating"]].head(2))
-        
+                
         return recomendaciones[["name", "address", "rating"]]
