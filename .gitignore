@@ -2,6 +2,7 @@ braided-grammar-430922-b4-64d668a5dc36.json
 load_data.py
 .streamlit/secrets.toml
 spliter.py
+data/similitud_restaurantes.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
