@@ -53,6 +53,7 @@ if model_choice == "Modelo 1":
         if "restaurant" in categoria_deseada:
             categoria_deseada = categoria_deseada.replace("restaurant", "")
         
+        
         st.write(recommender.recomendar_restaurantes(
             categoria_deseada, estado_deseado, ciudad_deseado))
 

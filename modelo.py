@@ -1,6 +1,7 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from google.cloud import storage
+# from google.cloud import storage
+import streamlit as st
 import pandas as pd
 import joblib
 import gdown
@@ -24,20 +25,6 @@ class Recommender:
         self.similitud = joblib.load('data/similitud_restaurantes.pkl')
         self.tfidf_matrix = self.vectorizador.fit_transform(self.data['text'])
 
-    def download_blob(bucket_name, source_blob_name, destination_file_name):
-        # Inicializa el cliente
-        storage_client = storage.Client()
-
-        # Accede al bucket
-        bucket = storage_client.bucket(bucket_name)
-
-        # Accede al blob (archivo)
-        blob = bucket.blob(source_blob_name)
-
-        # Descarga el archivo
-        blob.download_to_filename(destination_file_name)
-
-        print(f'Archivo {source_blob_name} descargado a {destination_file_name}.')
 
     def recomendar_restaurantes(self, categoria, estado, ciudad):
         filtrado = self.data[(self.data['state'] == estado.upper()) & (
@@ -55,5 +42,12 @@ class Recommender:
 
         recomendaciones = filtrado.sort_values(
             by='similitud_promedio', ascending=False)
-                
-        return recomendaciones[["name", "address", "rating"]]
+        
+        if recomendaciones.empty:
+            return "No hay restaurantes que coincidan con la búsqueda."
+        
+        else:
+            recomendaciones["rating"] = recomendaciones["rating"].round(1)
+            st.write("Recomendaciones Encontradas:")
+            
+            return recomendaciones[["name", "address", "rating"]].head(5)
