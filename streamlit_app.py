@@ -2,6 +2,7 @@ from pathlib import Path
 from google.cloud import bigquery
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from PIL import Image
 import streamlit as st
 import pandas as pd
 import math
@@ -17,7 +18,12 @@ st.title("Sistemas de Recomendaciónes")
 
 col1, col2 = st.columns((1, 2))
 
-col1.image('images\logo.png',width=250)
+try:
+    img = Image.open('images/logo.png') 
+    col1.image(img, width=250)
+
+except Exception as e:
+    st.error(f"Error al cargar la imagen: {e}")
 
 # Selección del modelo de recomendación
 model_choice = col2.radio(
