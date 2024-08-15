@@ -14,7 +14,7 @@ from modelo import Recommender
 from modelo_city import recommend_city
 
 # Titulo de la pagina
-st.title("Sistemas de Recomendaciónes")
+st.title("Sistemas de Recomendaciones")
 
 col1, col2 = st.columns((1, 2))
 
