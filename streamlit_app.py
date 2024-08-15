@@ -17,7 +17,7 @@ st.title("Sistemas de Recomendaciónes")
 
 col1, col2 = st.columns((1, 2))
 
-col1.image('images/logo.png',width=250)
+col1.image('images\logo.png',width=250)
 
 # Selección del modelo de recomendación
 model_choice = col2.radio(
