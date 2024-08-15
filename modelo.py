@@ -48,6 +48,5 @@ class Recommender:
         
         else:
             recomendaciones["rating"] = recomendaciones["rating"].round(1)
-            st.write("Recomendaciones Encontradas:")
             
             return recomendaciones[["name", "address", "rating"]].head(5)

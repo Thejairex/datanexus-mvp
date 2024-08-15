@@ -60,7 +60,7 @@ if model_choice == "Recomendacion de Restaurantes":
         if "restaurant" in categoria_deseada:
             categoria_deseada = categoria_deseada.replace("restaurant", "")
         
-        
+        col2.write("Recomendaciones Encontradas:")
         col2.dataframe(recommender.recomendar_restaurantes(
             categoria_deseada, estado_deseado, ciudad_deseado), hide_index=True)
 
