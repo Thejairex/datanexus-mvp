@@ -26,7 +26,7 @@ class Recommender:
         self.tfidf_matrix = self.vectorizador.fit_transform(self.data['text'])
 
 
-    def recomendar_restaurantes(self, categoria, estado, ciudad):
+    def recomendar_restaurantes(self, categoria, estado, ciudad) -> pd.DataFrame:
         filtrado = self.data[(self.data['state'] == estado.upper()) & (
             self.data['category'].str.contains(categoria, case=False)) & (self.data['city'] == ciudad)]
 
