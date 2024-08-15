@@ -1,33 +1,43 @@
-import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from google.cloud import storage
+import pandas as pd
 import joblib
-import os
+import gdown
 import time
+import os
 
 
 class Recommender:
     def __init__(self) -> None:
-        self.data = joblib.load('data/data.pkl')
+        self.data = joblib.load('data/data_restaurantes.pkl')
         self.vectorizador = TfidfVectorizer()
 
-        output_file = 'data/similitud_restaurantes.pkl'
-        input_dir = 'data/'
-        num_parts = len([name for name in os.listdir(input_dir)
-                        if name.startswith('similitud_restaurantes.pkl.part')])
+        if not os.path.exists('data/similitud_restaurantes.pkl'):
 
-        self.recomponer_archivo(output_file, input_dir, num_parts)
+            # URL del archivo en Google Drive
+            url = 'https://drive.google.com/uc?id=1zmF-WBfMPZLR67vqaHs4HuPv9z-iIyoA'
+
+            # Descargar el archivo
+            gdown.download(url, 'data/similitud_restaurantes.pkl', quiet=False)
+        
         self.similitud = joblib.load('data/similitud_restaurantes.pkl')
         self.tfidf_matrix = self.vectorizador.fit_transform(self.data['text'])
 
-    def recomponer_archivo(self, output_file, input_dir, num_parts):
-        with open(output_file, 'wb') as f:
-            for i in range(num_parts):
-                part_file = os.path.join(
-                    input_dir, f'similitud_restaurantes.pkl.part{i}')
-                
-                with open(part_file, 'rb') as chunk_file:
-                    f.write(chunk_file.read())
+    def download_blob(bucket_name, source_blob_name, destination_file_name):
+        # Inicializa el cliente
+        storage_client = storage.Client()
+
+        # Accede al bucket
+        bucket = storage_client.bucket(bucket_name)
+
+        # Accede al blob (archivo)
+        blob = bucket.blob(source_blob_name)
+
+        # Descarga el archivo
+        blob.download_to_filename(destination_file_name)
+
+        print(f'Archivo {source_blob_name} descargado a {destination_file_name}.')
 
     def recomendar_restaurantes(self, categoria, estado, ciudad):
         filtrado = self.data[(self.data['state'] == estado.upper()) & (
